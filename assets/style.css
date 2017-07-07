@@ -10,6 +10,3 @@ body{
     width: 480px;
     margin: 0px auto;
 }
-body > *{
-    display: block;
-}
