@@ -1,4 +1,4 @@
-html, body{
+html, body {
     display: block;
     width: 100%;
     min-width: 480px;
@@ -6,7 +6,7 @@ html, body{
     margin: 0px;
     background: #060;
 }
-body{
+body {
     width: 480px;
     margin: 0px auto;
 }
