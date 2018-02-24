@@ -1,3 +1,25 @@
+/* MIT License
+
+Copyright (c) 2017 Eridan Domoratskiy
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE. */
+
 var tictactoe = {};
 
 // General
@@ -15,7 +37,7 @@ tictactoe.cellSprite = [];
 
 // Pre-loading
 
-fabric.loadSVGFromURL("assets/svg/logo.svg", function(objects, options){
+fabric.loadSVGFromURL("assets/svg/logo.svg", function(objects, options) {
     tictactoe.logo = fabric.util.groupSVGElements(objects, options);
     tictactoe.logo.set({
         selectable: false,
@@ -25,7 +47,7 @@ fabric.loadSVGFromURL("assets/svg/logo.svg", function(objects, options){
     tictactoe.canvas.add(tictactoe.logo);
     tictactoe.canvas.renderAll();
 });
-fabric.loadSVGFromURL("assets/svg/copyright.svg", function(objects, options){
+fabric.loadSVGFromURL("assets/svg/copyright.svg", function(objects, options) {
     tictactoe.copyright = fabric.util.groupSVGElements(objects, options);
     tictactoe.copyright.set({
         scaleX: 1.2, scaleY: 1.2, selectable: false,
@@ -34,12 +56,12 @@ fabric.loadSVGFromURL("assets/svg/copyright.svg", function(objects, options){
     }).on("mousedown", function(){
         window.open("https://byprogminer.ru/", "_blank");
     });
-    tictactoe.copyright.getCursor = function(){return "pointer";};
+    tictactoe.copyright.getCursor = function() { return "pointer"; };
     tictactoe.canvas.add(tictactoe.copyright);
     tictactoe.canvas.renderAll();
 });
 
-fabric.loadSVGFromURL("assets/svg/ground.svg", function(objects, options){
+fabric.loadSVGFromURL("assets/svg/ground.svg", function(objects, options) {
     tictactoe.groundbg = fabric.util.groupSVGElements(objects, options);
     tictactoe.groundbg.set({
         selectable: false,
@@ -47,14 +69,14 @@ fabric.loadSVGFromURL("assets/svg/ground.svg", function(objects, options){
         shadow: new fabric.Shadow("1px 1px 0px #000")
     });
 });
-fabric.loadSVGFromURL("assets/svg/x.svg", function(objects, options){
+fabric.loadSVGFromURL("assets/svg/x.svg", function(objects, options) {
     tictactoe.cellSprite[1] = {
         objects: objects,
         options: options,
         state: 1
     };
 });
-fabric.loadSVGFromURL("assets/svg/o.svg", function(objects, options){
+fabric.loadSVGFromURL("assets/svg/o.svg", function(objects, options) {
     tictactoe.cellSprite[2] = {
         objects: objects,
         options: options,
@@ -82,22 +104,22 @@ tictactoe.Button = fabric.util.createClass(fabric.Group, {
             top: args.y, left: args.x
         });
 
-        this.on("mousedown", function(e){
+        this.on("mousedown", function(e) {
             args.click(e);
         });
 
         var thisVar = this;
-        tictactoe.canvas.on("mouse:move", function(opt){
-            if(!opt.target || opt.target != thisVar){
-                if(thisVar.item(1).getTextDecoration() == "underline") thisVar.item(1).set({textDecoration: ""});
-                if(thisVar.item(0).getShadow().color != "rgba(0, 0, 0, 0.5)") thisVar.item(0).getShadow().color = "rgba(0, 0, 0, 0.5)";
-            }else{
+        tictactoe.canvas.on("mouse:move", function(opt) {
+            if (!opt.target || opt.target != thisVar) {
+                if (thisVar.item(1).getTextDecoration() == "underline") thisVar.item(1).set({textDecoration: ""});
+                if (thisVar.item(0).getShadow().color != "rgba(0, 0, 0, 0.5)") thisVar.item(0).getShadow().color = "rgba(0, 0, 0, 0.5)";
+            } else {
                 thisVar.item(1).set({textDecoration: "underline"});
                 thisVar.item(0).getShadow().color = "rgba(0, 0, 0, 0.75)";
             }
             tictactoe.canvas.renderAll();
         });
-    }, getCursor: function(){
+    }, getCursor: function() {
         return "pointer";
     }
 });
@@ -115,16 +137,16 @@ tictactoe.Cell = fabric.util.createClass(fabric.Group, {
             top: args.y + 200, left: args.x + 56,
             width: args.width, height: args.height
         })
-        this.on("mousedown", function(e){
+        this.on("mousedown", function(e) {
             if(!tictactoe.gameSettings || !tictactoe.gameSettings.canMove || thisVar.state != 0 || this.getObjects().length > 0) return;
 
             thisVar.setState(tictactoe.gameSettings.playerState);
 
-            setTimeout(function(){
+            setTimeout(function() {
                 tictactoe.gameSettings.canMove = false;
                 tictactoe.gameSettings.betweenMoves();
 
-                if(!tictactoe.gameSettings) return;
+                if (!tictactoe.gameSettings) return;
 
                 tictactoe.gameSettings.enemyMove();
                 tictactoe.gameSettings.canMove = true;
@@ -133,8 +155,8 @@ tictactoe.Cell = fabric.util.createClass(fabric.Group, {
             }, 1);
         });
     },
-    setState: function(state){
-        if(!tictactoe.gameSettings || this.state != 0 || this.getObjects().length > 0) return;
+    setState: function(state) {
+        if (!tictactoe.gameSettings || this.state != 0 || this.getObjects().length > 0) return;
 
         this.state = state;
         this.add(fabric.util.groupSVGElements(tictactoe.cellSprite[state].objects, tictactoe.cellSprite[state].options));
@@ -145,53 +167,53 @@ tictactoe.Cell = fabric.util.createClass(fabric.Group, {
         });
 
         tictactoe.canvas.renderAll();
-    }, getState: function(){
+    }, getState: function() {
         return this.state;
-    }, resetState: function(){
-        do{
+    }, resetState: function() {
+        do {
             var arr = this.getObjects();
-            if(arr.length > 0) this.remove(arr[0]);
-        }while(arr.length > 0);
+            if (arr.length > 0) this.remove(arr[0]);
+        } while (arr.length > 0);
 
         this.state = 0;
 
         tictactoe.canvas.renderAll();
-    }, getCursor: function(){
+    }, getCursor: function() {
         return (!tictactoe.gameSettings || !tictactoe.gameSettings.canMove || this.state != 0 || this.getObjects().length > 0) ? "default" : "pointer";
     }
 });
 
 // Functions
 
-tictactoe.clearCanvas = function(){
-    do{
-        var arr = tictactoe.canvas.getObjects().filter(function(item){
+tictactoe.clearCanvas = function() {
+    do {
+        var arr = tictactoe.canvas.getObjects().filter(function(item) {
             return item != tictactoe.logo && item != tictactoe.copyright;
         });
-        if(arr.length > 0) tictactoe.canvas.remove(arr[0]);
-    }while(arr.length > 0);
+        if (arr.length > 0) tictactoe.canvas.remove(arr[0]);
+    } while (arr.length > 0);
 };
 
-tictactoe.startGame = function(settings = {}){
-    for(var key in tictactoe.cells) tictactoe.cells[key].resetState();
+tictactoe.startGame = function(settings = {}) {
+    for (var key in tictactoe.cells) tictactoe.cells[key].resetState();
 
     tictactoe.gameSettings = settings;
     tictactoe.gameSettings.__proto__ = {
         playerState: Math.floor(Math.random() * 2) + 1,
         canMove: true,
 
-        enemyMove: function(){
+        enemyMove: function() {
             console.error("Enemy's move function isn't changed!");
-        }, betweenMoves: function(){
+        }, betweenMoves: function() {
             var obj = tictactoe.isGameOver();
-            if(obj === false) return;
+            if (obj === false) return;
 
             tictactoe.gameOver(obj.winner, obj.winCombo);
         }
     };
     tictactoe.gameSettings.canMove = tictactoe.gameSettings.playerState == 1;
 
-    if(!tictactoe.gameSettings.canMove){
+    if (!tictactoe.gameSettings.canMove) {
         tictactoe.gameSettings.enemyMove();
         tictactoe.gameSettings.canMove = true;
         tictactoe.gameSettings.betweenMoves();
@@ -201,34 +223,35 @@ tictactoe.startGame = function(settings = {}){
     tictactoe.makeScene();
 }
 
-tictactoe.serializeGround = function(){
+tictactoe.serializeGround = function() {
     var ret = [];
-    for(var i = 0; i < tictactoe.cells.length; i++)
+    for (var i = 0; i < tictactoe.cells.length; i++)
         ret[i] = tictactoe.cells[i].getState();
 
     return ret;
 }
 
-tictactoe.deserializeGround = function(cells = [0, 0, 0, 0, 0, 0, 0, 0, 0]){
-    for(var i = 0; i < tictactoe.cells.length; i++){
+tictactoe.deserializeGround = function(cells = [0, 0, 0, 0, 0, 0, 0, 0, 0]) {
+    for (var i = 0; i < tictactoe.cells.length; i++) {
     	tictactoe.cells[i].resetState();
         if(cells[i] === 0) continue;
+
         tictactoe.cells[i].setState(cells[i]);
     }
 }
 
-tictactoe.isGameOver = function(seriCells = tictactoe.serializeGround()){
+tictactoe.isGameOver = function(seriCells = tictactoe.serializeGround()) {
     var empties = 0;
 
     {
         var crosses = 0, zeroes = 0;
 
-        for(var i = 0; i < seriCells.length; i++)
-           if(seriCells[i] == 0) empties++;
-           else if(seriCells[i] == 1) crosses++;
-           else if(seriCells[i] == 2) zeroes++;
+        for (var i = 0; i < seriCells.length; i++)
+           if (seriCells[i] == 0) empties++;
+           else if (seriCells[i] == 1) crosses++;
+           else if (seriCells[i] == 2) zeroes++;
 
-        if(zeroes < 3 && crosses < 3) return false;
+        if (zeroes < 3 && crosses < 3) return false;
     }
 
     var winCombos = [
@@ -265,35 +288,35 @@ tictactoe.isGameOver = function(seriCells = tictactoe.serializeGround()){
          1, 0, 0]     // /
     ], winner = 0, winCombo;
 
-    winCombos.forEach(function(item){
+    winCombos.forEach(function(item) {
         var sum = 0;
-        for(var i = 0; i < 9; i++) sum += item[i] * seriCells[i];
+        for (var i = 0; i < 9; i++) sum += item[i] * seriCells[i];
 
-        if(sum == 0 || sum % 111 != 0) return false;
+        if (sum == 0 || sum % 111 != 0) return false;
 
         winner = sum / 111;
         winCombo = item;
     });
 
-    if(winner > 0 || empties <= 0) return {winner: winner, winCombo: winCombo};
+    if (winner > 0 || empties <= 0) return {winner: winner, winCombo: winCombo};
     return false;
 }
 
-tictactoe.quitGame = function(){
-    if(!tictactoe.gameSettings) return;
+tictactoe.quitGame = function() {
+    if (!tictactoe.gameSettings) return;
 
     delete tictactoe.gameSettings;
 }
 
-tictactoe.gameOver = function(winner = 0, combination = [0, 0, 0, 0, 0, 0, 0, 0, 0]){
+tictactoe.gameOver = function(winner = 0, combination = [0, 0, 0, 0, 0, 0, 0, 0, 0]) {
     tictactoe.gameSettings.canMove = false;
 
-    combination.forEach(function(item, i){combination[i] = Math.pow(item, 0) % (item + 1);});
+    combination.forEach(function(item, i) { combination[i] = Math.pow(item, 0) % (item + 1); });
 
     var combiPoints = [];
 
-    combination.forEach(function(item, i){
-        if(item == 0) return;
+    combination.forEach(function(item, i) {
+        if (item == 0) return;
 
         combiPoints[combiPoints.length] = {
             x: tictactoe.cells[i].left + 0.5 * tictactoe.cells[i].width,
@@ -309,38 +332,38 @@ tictactoe.gameOver = function(winner = 0, combination = [0, 0, 0, 0, 0, 0, 0, 0,
     }));
     tictactoe.canvas.renderAll();
 
-    setTimeout(function(){
-        if(winner > 0) alert("Победили " + (winner == 1 ? "крестики" : "нолики") + "!");
+    setTimeout(function() {
+        if (winner > 0) alert("Победили " + (winner == 1 ? "крестики" : "нолики") + "!");
         else alert("Ничья!");
     }, 1);
 
     tictactoe.quitGame();
 }
 
-tictactoe.startInternetGame = function(gameID, playerID, state){
+tictactoe.startInternetGame = function(gameID, playerID, state) {
     tictactoe.startGame({
         playerState: state,
 
-        enemyMove: function(){
-            var response = false, sync = function(){
-                if(response === false || !tictactoe.gameSettings) return;
+        enemyMove: function() {
+            var response = false, sync = function() {
+                if (response === false || !tictactoe.gameSettings) return;
 
                 tictactoe.deserializeGround(response.matrix);
                 tictactoe.gameSettings.playerState = response.state;
 
-                if(response.gameOver) tictactoe.gameSettings.__proto__.betweenMoves();
+                if (response.gameOver) tictactoe.gameSettings.__proto__.betweenMoves();
 
                 tictactoe.gameSettings.canMove = true;
-            }, wait = function(){
+            }, wait = function() {
                 $.post("/game.php?do=wait", {
                     id: gameID,
                     pid: playerID
-                }, function(data){
-                    if(!tictactoe.gameSettings) return;
+                }, function(data) {
+                    if (!tictactoe.gameSettings) return;
 
                     response = JSON.parse(data);
 
-                    if(response === false) setTimeout(wait, 500);
+                    if (response === false) setTimeout(wait, 500);
                     else sync();
                 });
             };
@@ -349,60 +372,59 @@ tictactoe.startInternetGame = function(gameID, playerID, state){
                 id: gameID,
                 pid: playerID,
                 matrix: JSON.stringify(tictactoe.serializeGround())
-            }, function(data){
-                if(!tictactoe.gameSettings) return;
+            }, function(data) {
+                if (!tictactoe.gameSettings) return;
                 
                 response = JSON.parse(data);
 
-                if(response === false) setTimeout(wait, 1);
+                if (response === false) setTimeout(wait, 1);
                 else sync();
             });
-        }, betweenMoves: function(){
+        }, betweenMoves: function() {
             tictactoe.gameSettings.canMove = false;
         }
-
     });
 }
 
-tictactoe.makeScene = function(){
+tictactoe.makeScene = function() {
     tictactoe.clearCanvas();
 
     // Draw current screen
-    switch(tictactoe.state){
+    switch (tictactoe.state) {
     case 0: // Main menu
-        tictactoe.canvas.add(new tictactoe.Button({text: "Игра с ботом", y: 230, click: function(e){
+        tictactoe.canvas.add(new tictactoe.Button({text: "Игра с ботом", y: 230, click: function(e) {
             tictactoe.startGame({
-                enemyMove: function(){
+                enemyMove: function() {
                     var seriCells = tictactoe.serializeGround(), newCells, empties = 0, bot = (this.playerState % 2) + 1;
 
-                    for(var i = 0; i < 9; i++){
-                        if(seriCells[i] != 0) continue;
+                    for (var i = 0; i < 9; i++) {
+                        if (seriCells[i] != 0) continue;
                         newCells = seriCells.slice(0);
 
                         newCells[i] = bot;
-                        if(tictactoe.isGameOver(newCells) === false) continue;
+                        if (tictactoe.isGameOver(newCells) === false) continue;
 
                         tictactoe.cells[i].setState(bot);
                         return; 
                     }
 
-                    for(var i = 0; i < 9; i++){
-                        if(seriCells[i] != 0) continue;
+                    for (var i = 0; i < 9; i++) {
+                        if (seriCells[i] != 0) continue;
                         newCells = seriCells.slice(0);
                         empties++;
 
                         newCells[i] = this.playerState;
-                        if(tictactoe.isGameOver(newCells) === false) continue;
+                        if (tictactoe.isGameOver(newCells) === false) continue;
 
                         tictactoe.cells[i].setState(bot);
                         return; 
                     }
 
                     var randCell = Math.floor(Math.random() * (empties));
-                    for(var i = 0, j = 0; i < 9; i++){
-                        if(seriCells[i] != 0) continue;
+                    for (var i = 0, j = 0; i < 9; i++) {
+                        if (seriCells[i] != 0) continue;
 
-                        if(j == randCell){
+                        if (j == randCell) {
                             tictactoe.cells[i].setState(bot);
                             return;
                         }
@@ -413,31 +435,31 @@ tictactoe.makeScene = function(){
             });
         }}));
 
-        tictactoe.canvas.add(new tictactoe.Button({text: "Игра на одном компьютере", y: 275, click: function(e){
+        tictactoe.canvas.add(new tictactoe.Button({text: "Игра на одном компьютере", y: 275, click: function(e) {
             tictactoe.startGame({
                 playerState: 1,
 
-                enemyMove: function(){
+                enemyMove: function() {
                     this.playerState = (this.playerState % 2) + 1;
                 }
             });
         }}));
         
-        tictactoe.canvas.add(new tictactoe.Button({text: "Игра по интернету", y: 320, click: function(e){
-            $.post("/game.php?do=new", {}, function(data){
+        tictactoe.canvas.add(new tictactoe.Button({text: "Игра по интернету", y: 320, click: function(e) {
+            $.post("/game.php?do=new", {}, function(data) {
                 data = JSON.parse(data);
             	var gameID = data.id, playerID = data.pid;
 
                 tictactoe.state = 2;
                 tictactoe.makeScene();
             
-                tictactoe.canvas.add(new tictactoe.Button({text: "Получить ссылку на игру", y: 275, click: function(e){
-                    setTimeout(function(){
+                tictactoe.canvas.add(new tictactoe.Button({text: "Получить ссылку на игру", y: 275, click: function(e) {
+                    setTimeout(function() {
                     	prompt("Скопируйте ссылку в поле ниже:", location.protocol + "//" + location.hostname + "?connect=" + gameID);
                     }, 1);
                 }}));
             
-                tictactoe.canvas.add(new tictactoe.Button({text: "Отмена", y: 320, click: function(e){
+                tictactoe.canvas.add(new tictactoe.Button({text: "Отмена", y: 320, click: function(e) {
                     $.post("/game.php?do=leave", {
                         id: gameID,
                         pid: playerID
@@ -450,12 +472,12 @@ tictactoe.makeScene = function(){
                     tictactoe.makeScene();
                 }}));
 
-                var checkConnection = function(){
+                var checkConnection = function() {
                     $.post("/game.php?do=checkConnection", {
                         id: gameID,
                         pid: playerID
-                    }, function(data){
-                        if(data === "false"){
+                    }, function(data) {
+                        if (data === "false") {
                             setTimeout(checkConnection, 500);
                             return;
                         }
@@ -471,9 +493,9 @@ tictactoe.makeScene = function(){
     case 1: // Game
         tictactoe.canvas.add(tictactoe.groundbg);
 
-        for(var key in tictactoe.cells) tictactoe.canvas.add(tictactoe.cells[key]);
+        for (var key in tictactoe.cells) tictactoe.canvas.add(tictactoe.cells[key]);
 
-        tictactoe.canvas.add(new tictactoe.Button({text: "Выйти из игры", y: 600, click: function(e){
+        tictactoe.canvas.add(new tictactoe.Button({text: "Выйти из игры", y: 600, click: function(e) {
             tictactoe.quitGame();
 
             //location.href = "/";
@@ -514,8 +536,8 @@ tictactoe.cells = [
     new tictactoe.Cell({x: 251, y: 255, width: 110, height: 110}) // 3:3
 ];
 
-tictactoe.canvas.on("mouse:move", function(e){
-    if(!e.target || !e.target.getCursor)
+tictactoe.canvas.on("mouse:move", function(e) {
+    if (!e.target || !e.target.getCursor)
         tictactoe.canvas.set("defaultCursor", "default");
     else tictactoe.canvas.set("defaultCursor", e.target.getCursor());
 });
