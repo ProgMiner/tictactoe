@@ -26,7 +26,7 @@ SOFTWARE. */
 <html>
     <head>
         <title>Крестики-Нолики</title>
-        <link rel="stylesheet" href="assets/style.css?<?echo time();?>">
+        <link rel="stylesheet" href="assets/style.css?<?=time()?>">
         <script type="text/javascript" src="assets/js/jquery.min.js"></script>
         <script type="text/javascript" src="assets/js/fabric.min.js"></script>
         <meta name="viewport" content="width=device-width">
@@ -34,7 +34,7 @@ SOFTWARE. */
     <body>
         <canvas id="canvas" width="480" height="700">Обновите браузер</canvas>
 
-        <script type="text/javascript" src="assets/js/script.js?<?echo time();?>"></script>
+        <script type="text/javascript" src="assets/js/script.js?<?=time()?>"></script>
         <?php if(isset($_GET['connect'])): ?>
             <script type="text/javascript">
                 alert("Ждите");
