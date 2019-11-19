@@ -112,7 +112,7 @@ if ($do === 'new') { // Creating a new game
     $time = time();
     $pid = rand() + 1;
 
-    $mysqli->query("INSERT INTO `tictactoe` (`id`, `pid1`, `pid2`, `matrix`, `currentPlayer`, `created`, `cross)
+    $mysqli->query("INSERT INTO `tictactoe` (`id`, `pid1`, `pid2`, `matrix`, `currentPlayer`, `created`, `cross`)
                                  VALUES ({$id}, {$pid}, 0, '[0, 0, 0, 0, 0, 0, 0, 0, 0]', 0, {$time}, 0)", MYSQLI_USE_RESULT)
         or die('MySQL Error (' . $mysqli->errno . ') ' . $mysqli->error);
 
